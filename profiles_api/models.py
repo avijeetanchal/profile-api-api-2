@@ -11,7 +11,7 @@ class UserProfileManager(BaseUserManager):
     def create_user(self, email, name, password=None):
         """CREATE A new USER profile"""
         if not email:
-            """if email passed is empty string, or null value, the error raise"""
+            #"""if email passed is empty string, or null value, the error raise"""
             raise ValueError('user must have an email address')
 
         #"""second half to be lower case, so standarise it"""
@@ -30,7 +30,7 @@ class UserProfileManager(BaseUserManager):
         return user
 
 
-    def create_super_user(self, email, name, password):
+    def create_superuser(self, email, name, password):
         """ create and save a new super user with given details"""
         user = self.create_user(email, name, password)
 
