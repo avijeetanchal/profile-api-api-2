@@ -15,14 +15,16 @@ router.register('hello-viewset',views.HelloViewSet, base_name='hello-viewset') #
 router.register('profile',views.UserProfileViewSet)
 ## unlike the prvious route ,, we dont need to specify a base_name bcoz we have
 # in our vviewset a queryset object , the DRF confires the name provided to
-# the modol in the queryset 
+# the modol in the queryset
 
 
 
 ## url to map different views in our app.
 urlpatterns = [
     path('hello-view/', views.HelloApiView.as_view()),
+    path('login/',views.UserLoginApiView.as_view()),
     path('', include(router.urls))  ## blank -- to include all of the URLs in base URl.
+
 ]
 # """ the url is mathced and then HelloApiView is sent as view
 # in which it will give a get response if get request has been made"""

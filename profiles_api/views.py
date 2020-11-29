@@ -9,6 +9,8 @@ from rest_framework.authentication import TokenAuthentication
 # when user loggs in on every request we add this token along
 from rest_framework import filters
 
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
 
 from profiles_api import serializers
 ## serializers is used to tell API view what data to expect when make a
@@ -141,3 +143,12 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name','email',)
+
+
+
+class UserLoginApiView(ObtainAuthToken):
+    """ HANDLE creating user authentication token"""
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+    ##  it adds renderer classes to our obtain auth token view
+    ## which will enable in django admin, the rest of the view sets
+    ## we enables ObtainAuthToken by api_settings
