@@ -1,5 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import BaseUserManager
+from django.conf import settings
 
 
     # """ AS WE HAVE CUSTOMISED THE MODEL WITH EMAIL AND FULL NAME ISTEAD OF EMAIL AND PASS
@@ -90,3 +93,30 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     # """SUPER USER IS ADMIN USER THAT WILL HAVE FULL CONTROL AND ABLE TO ACCESS THE DJANGO ADMIN
     # AND SEE ALL THE MODELS IN THE DATABASE"""
+
+
+
+
+class ProfileFeedItem(models.Model):
+    """Profile status update"""
+    ## this model will allow users to store updates, so everytime they create
+    # a new update it will create a new ProfileFeedItem object and associate
+    # that object with with the user that created using foreign key
+    user_profile = models.ForeignKey(
+         settings.AUTH_USER_MODEL, # name of the model that is remote model for this foreign key
+         ## what this will do is retrieve the value from auth user model setting in our settings.py file
+         on_delete = models.CASCADE # what it does is it tells django what to do if the remote field is deleted
+         ## so we have profileFeedItem in our database and each one of them has a user profile associated
+         ## so cascade the feed items related to the user who is deleted
+    )
+
+    status_text = models.CharField(max_length=255)
+    # this will contain the status text of the feed update.
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    # this will everytime we create new feed item, automatically add timestamp when added the feed.
+
+    ####### string representation of our model.... to tell python what to do when we convert a model instance into a string
+    def __str__(self):
+        """Return model as a string"""
+        return self.status_text

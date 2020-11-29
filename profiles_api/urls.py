@@ -17,6 +17,8 @@ router.register('profile',views.UserProfileViewSet)
 # in our vviewset a queryset object , the DRF confires the name provided to
 # the modol in the queryset
 
+router.register('feed',views.UserProfileFeedViewSet)
+
 
 
 ## url to map different views in our app.

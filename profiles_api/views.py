@@ -12,6 +12,8 @@ from rest_framework import filters
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 
+from rest_framework .permissions import IsAuthenticatedOrReadOnly  ## for feed update 
+
 from profiles_api import serializers
 ## serializers is used to tell API view what data to expect when make a
 # post put patch request
@@ -152,3 +154,28 @@ class UserLoginApiView(ObtainAuthToken):
     ##  it adds renderer classes to our obtain auth token view
     ## which will enable in django admin, the rest of the view sets
     ## we enables ObtainAuthToken by api_settings
+
+
+class UserProfileFeedViewSet(viewsets.ModelViewSet):
+    """ Handles creating, updating and delete profile feed items"""
+    # we gonna use token authentication to authenticate reuqests to out end point
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = serializers.ProfileFeedItemSerializer
+    # this sets the cerializers class on our view sets
+
+    # we gonna apply query set managed by our view sets
+    queryset =  models.ProfileFeedItem.objects.all()
+
+    permission_classes = (
+        permissions.UpdateOwnStatus, # this wont allow user to update others status
+        IsAuthenticatedOrReadOnly # this permission from DRF
+    )
+
+    # manually set a field to read only we do this below
+    def perform_create(self, serializer):
+        """Sets the user profile to the logged in user"""
+        ## the perform_create func is handy from django that allows you to
+        # override the behvaour for creating objects through a Model view set
+        ### THIS IS CALLED EVERY POST REQUEST TO OUR VIEW SET
+        serializer.save(user_profile=self.request.user)
+        ##
