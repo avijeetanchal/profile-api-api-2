@@ -7,6 +7,7 @@ from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
 # this will be used to authenticate users ,, works by generating random tokens,
 # when user loggs in on every request we add this token along
+from rest_framework import filters
 
 
 from profiles_api import serializers
@@ -137,3 +138,6 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,) #make it tuple
     permission_classes = (permissions.UpdateOwnProfile,) ## variable name is cause errors
     ## if wronf variable name assign to permission_classes
+
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name','email',)
