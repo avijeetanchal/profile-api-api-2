@@ -4,10 +4,18 @@ from rest_framework import status
 ## status is list of handy HTTP status codes
 from rest_framework import viewsets
 
+from rest_framework.authentication import TokenAuthentication
+# this will be used to authenticate users ,, works by generating random tokens,
+# when user loggs in on every request we add this token along
+
 
 from profiles_api import serializers
 ## serializers is used to tell API view what data to expect when make a
 # post put patch request
+from profiles_api import models
+
+from profiles_api import permissions ## to authenticate we made our logic
+
 
 
 ## APIVIEW  ===
@@ -118,3 +126,14 @@ class HelloViewSet(viewsets.ViewSet): # base viewset class that django providwe
     def destroy(self,request,pk=None):
         """ handle deleting an OBJECT"""
         return Response({'method':'DELETE'})
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """Handle creating and updating Profile"""
+    serializer_class = serializers.UserProfileSerializer
+    queryset = models.UserProfile.objects.all()
+    ## DRF knows the standard func you want to perform on a model view set
+    ## create and list funcs  , and CRUD also
+    authentication_classes = (TokenAuthentication,) #make it tuple
+    permission_classes = (permissions.UpdateOwnProfile,) ## variable name is cause errors
+    ## if wronf variable name assign to permission_classes
