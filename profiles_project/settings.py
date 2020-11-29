@@ -23,7 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'my7ynydy05#jy%dm(d7cz*1=elpk+og^a_6l=*oiil+)j=($-%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int(os.environ.get('DEBUG',1)))
+##### what is does is pulls in the value of the environment variable called DEBUG...
+## we set the environ variable in the superviser file.conf
+##
 
 ALLOWED_HOSTS = []
 
@@ -127,3 +130,7 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL= 'profiles_api.UserProfile'
 """ THIS TELL DJANGO TO LOOK AT PROFILES_API APP AND FIND THE MODEL CALLED
 UserProfile IN MODEL.PY AND USE THIS FOR ALL AUTHENTICATION AND USER CREATION"""
+
+STATIC_ROOT='static/'
+###  this is the location where django will store all of the static files wehn we
+# wun our collect statc command
